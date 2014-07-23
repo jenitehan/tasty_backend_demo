@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function tasty_backend_demo_install() {
+  
+  // Load the user roles we need.
+  $content_role = user_role_load_by_name('content admin');
+  $user_role = user_role_load_by_name('user admin');
+  
+  // Create a demo user.
+  $email = 'content_admin@tastybackend.com';
+  $fields = array(
+    'name' => 'demo',
+    'mail' => $email,
+    'pass' => 'demo',
+    'status' => 1,
+    'init' => $email,
+    'roles' => array(
+      DRUPAL_AUTHENTICATED_RID => 'authenticated user',
+      $content_role->rid => $content_role->name,
+      $user_role->rid => $user_role->name,
+    ),
+  );
+  user_save('', $fields);
+}
